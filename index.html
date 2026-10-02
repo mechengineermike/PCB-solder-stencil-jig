@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PCB Stencil Holder Generator</title>
+  <meta name="description" content="Generate a custom, 3D-printable PCB tray for the Solder Stencil PCB Holder directly in your browser.">
+  <meta name="theme-color" content="#141714">
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://mechengineermike.github.io/SolderStencilPCBHolder/">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://mechengineermike.github.io/SolderStencilPCBHolder/">
+  <meta property="og:title" content="PCB Stencil Holder Generator">
+  <meta property="og:description" content="Create a custom 3D-printable PCB tray for clean, repeatable solder paste application.">
+  <meta property="og:image" content="https://mechengineermike.github.io/SolderStencilPCBHolder/screenshot.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="PCB Stencil Holder Generator">
+  <meta name="twitter:description" content="Create a custom 3D-printable PCB tray in your browser.">
+  <meta name="twitter:image" content="https://mechengineermike.github.io/SolderStencilPCBHolder/screenshot.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="./img/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="./img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="./img/favicon-16x16.png">
+  <link rel="manifest" href="./img/site.webmanifest">
+  <link rel="stylesheet" href="styles.css">
+  <script type="importmap">
+    {"imports":{"three":"https://unpkg.com/three@0.158.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.158.0/examples/jsm/"}}
+  </script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="PCB Stencil Holder home"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span>STENCIL<span class="brand-accent">FIX</span></span></a>
+    <p>PCB stencil holder generator</p>
+    <a class="github-link" href="https://github.com/mechengineermike/SolderStencilPCBHolder" target="_blank" rel="noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+  </header>
+  <main class="workspace">
+    <aside class="panel" aria-label="Tray controls">
+      <section class="intro"><span class="eyebrow">PRINTABLE TOOLING</span><h1>Build a tray around your PCB.</h1><p>Enter your board dimensions. The holder keeps the PCB and stencil aligned for clean, repeatable paste application.</p></section>
+      <form id="stlForm">
+        <section>
+          <div class="section-heading"><span class="step">01</span><div><h2>Board size</h2><p>Finished PCB dimensions</p></div></div>
+          <div class="field-grid">
+            <label><span>Width</span><span class="number-wrap"><input type="number" id="width" min="5" max="100" step="0.1" value="100" required><small>mm</small></span></label>
+            <label><span>Height</span><span class="number-wrap"><input type="number" id="height" min="5" max="100" step="0.1" value="100" required><small>mm</small></span></label>
+          </div>
+        </section>
+        <section>
+          <div class="section-heading"><span class="step">02</span><div><h2>Fit</h2><p>Board stock and printer clearance</p></div></div>
+          <label class="field"><span>PCB thickness</span><select id="thickness"><option value="0.8">0.8 mm</option><option value="1.6" selected>1.6 mm</option><option value="2.0">2.0 mm</option><option value="2.4">2.4 mm</option><option value="3.2">3.2 mm</option></select></label>
+          <label class="field"><span>Printer tolerance</span><select id="tolerance"><option value="-0.8">−0.8 mm</option><option value="-0.6">−0.6 mm</option><option value="-0.4">−0.4 mm</option><option value="-0.2">−0.2 mm</option><option value="0">0 mm</option><option value="0.2">+0.2 mm</option><option value="0.4" selected>+0.4 mm</option><option value="0.6">+0.6 mm</option><option value="0.8">+0.8 mm</option></select></label>
+          <p class="hint">Tolerance is added to both board dimensions.</p>
+        </section>
+        <section class="actions">
+          <div class="section-heading"><span class="step">03</span><div><h2>Download</h2><p>Your tray and the reusable hardware</p></div></div>
+          <button type="button" class="primary" id="export-stl" disabled>Custom tray STL <span aria-hidden="true">↓</span></button>
+          <a href="./3D/PCBStencil.zip" class="secondary" download>Static holder files <span aria-hidden="true">↓</span></a>
+          <a href="./3D/PCBStencil_CustomTray_Blank.zip" class="text-link" download>Need a non-rectangular tray? Download the STEP template →</a>
+        </section>
+      </form>
+      <p class="privacy">Geometry is generated locally. Nothing leaves your browser.</p>
+    </aside>
+    <section class="viewer-shell" id="canvas-container" aria-label="3D tray preview">
+      <canvas id="myCanvas"></canvas>
+      <div class="viewer-label"><span class="status-dot"></span>LIVE PREVIEW</div>
+      <div class="model-size" id="model-size">100.4 × 100.4 × 1.6 mm</div>
+      <div class="viewer-help">Drag to orbit · Scroll to zoom</div>
+      <div class="viewer-error" id="viewer-error" role="alert"></div>
+    </section>
+  </main>
+  <footer><span>Designed by <a href="https://github.com/mechengineermike" target="_blank" rel="noreferrer">Michael Graham</a></span><span>Browser generator derived from the original open-source implementation.</span></footer>
+  <script type="module" src="3d.js"></script>
+</body>
+</html>
