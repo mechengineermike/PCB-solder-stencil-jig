@@ -13,7 +13,7 @@ A browser-based generator for making a custom 3D-printable PCB tray. The tray wo
 3. Select a clearance value that suits your printer.
 4. Download the generated tray STL and matching static holder bundle.
 
-The model is generated entirely in the browser; no files or dimensions are uploaded. The three holder bundles support boards up to 99 mm, 150 mm, or 201 mm. Each bundle includes STL and STEP files plus a blank tray for non-rectangular designs.
+The model is generated entirely in the browser; no files or dimensions are uploaded. The three holder bundles support board widths up to 99 mm, 150 mm, or 201 mm. Board height can extend to the full 118 mm, 169 mm, or 220 mm tray body, consuming the top and bottom margin as needed. Each bundle includes STL and STEP files plus a blank tray for non-rectangular designs.
 
 ## Credits
 

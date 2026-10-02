@@ -261,8 +261,8 @@ function adjustPlate(width, length, height) {
     let cubesY = [
         length,
         length,
-        (maxY / 2) - halfLength,
-        (maxY / 2) - halfLength
+        Math.max(0, (maxY / 2) - halfLength),
+        Math.max(0, (maxY / 2) - halfLength)
     ];
 
     cubes[0].scale.set(cubesX[0], cubesY[0], height); // Left
@@ -407,11 +407,11 @@ function handleAssemblyChange() {
     const widthInput = document.getElementById('width');
     const heightInput = document.getElementById('height');
     widthInput.max = assembly.nominal;
-    heightInput.max = assembly.nominal;
+    heightInput.max = assembly.body;
     if (parseFloat(widthInput.value) > assembly.nominal) widthInput.value = assembly.nominal;
-    if (parseFloat(heightInput.value) > assembly.nominal) heightInput.value = assembly.nominal;
+    if (parseFloat(heightInput.value) > assembly.body) heightInput.value = assembly.body;
 
-    document.getElementById('assembly-details').textContent = `${assembly.frame} × ${assembly.frame} mm outer frame · boards up to ${assembly.nominal} mm`;
+    document.getElementById('assembly-details').textContent = `${assembly.body} × ${assembly.body} mm tray body · ${assembly.nominal} mm max width`;
     const hardwareDownload = document.getElementById('hardware-download');
     hardwareDownload.href = `./3D/${assembly.bundle}`;
     hardwareDownload.firstChild.textContent = `${assembly.nominal} mm holder files `;
@@ -427,7 +427,7 @@ document.getElementById('thickness').addEventListener('change', handleInputChang
 document.getElementById('tolerance').addEventListener('change', handleInputChange);
 document.getElementById('assembly-size').addEventListener('change', handleAssemblyChange);
 
-// Call the function once to log the initial values on page load
-handleInputChange();
+// Apply the default assembly limits and render the initial tray.
+handleAssemblyChange();
 
 
