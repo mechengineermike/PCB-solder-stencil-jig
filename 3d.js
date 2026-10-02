@@ -15,6 +15,15 @@ let fingerThreshold = 25;
 
 let currentX, currentY, currentZ;
 let modelsPending = 4;
+const assemblySizes = {
+    99: { nominal: 99, body: 118, flapX: 67, frame: 125, bundle: 'PCBStencil_Size99mm_Set.zip' },
+    150: { nominal: 150, body: 169, flapX: 92.5, frame: 176, bundle: 'PCBStencil_Size150mm_Set.zip' },
+    201: { nominal: 201, body: 220, flapX: 118, frame: 227, bundle: 'PCBStencil_Size201mm_Set.zip' }
+};
+
+function getAssembly() {
+    return assemblySizes[document.getElementById('assembly-size').value];
+}
 
 
 function init() {
@@ -48,7 +57,7 @@ function init() {
     scene.add(keyLight);
 
     // A loose build-plane grid gives the model scale and orientation in space.
-    const grid = new THREE.GridHelper(240, 12, 0x596052, 0x2b302b);
+    const grid = new THREE.GridHelper(400, 20, 0x596052, 0x2b302b);
     grid.rotation.x = Math.PI / 2;
     grid.position.z = -2.1;
     grid.material.transparent = true;
@@ -72,7 +81,7 @@ function init() {
 
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
-        a.download = `PCBStencil_Tray_${currentX.toFixed(1)}x${currentY.toFixed(1)}mm.stl`;
+        a.download = `PCBStencil_${getAssembly().nominal}mm_Tray_${currentX.toFixed(1)}x${currentY.toFixed(1)}mm.stl`;
         a.click();
         URL.revokeObjectURL(a.href);
     });
@@ -130,7 +139,7 @@ function loadFlapSTLModel(isLeft = true) {
             flapRight = mesh;
         }
 
-        mesh.position.x = isLeft ? -67 : 67;
+        mesh.position.x = isLeft ? -getAssembly().flapX : getAssembly().flapX;
         if(isLeft){
             mesh.rotation.z = -Math.PI;
         }
@@ -168,11 +177,13 @@ function UpdateFlaps(){
     }
 
     if(flapLeft != null){
+        flapLeft.position.x = -getAssembly().flapX;
         flapLeft.position.z = -1;
         flapLeft.scale.set(1, 1, currentZ + 2);
 
     }
     if(flapRight != null){
+        flapRight.position.x = getAssembly().flapX;
         flapRight.position.z = -1;
         flapRight.scale.set(1, 1, currentZ + 2);
     }
@@ -230,10 +241,11 @@ function adjustPlate(width, length, height) {
     currentY = length;
     currentZ = height;
 
-    let maxX = 118;
-    let maxY = 118;
+    const assembly = getAssembly();
+    let maxX = assembly.body;
+    let maxY = assembly.body;
 
-    let fingerX = width > 97 ? 8 : 10;
+    let fingerX = width > assembly.nominal - 2 ? 8 : 10;
     let fingerY = 20;
 
     let halfWidth = width / 2;
@@ -297,6 +309,7 @@ function adjustPlate(width, length, height) {
     UpdateFlaps();
 
     base.position.set(0, 0, (-height/2) - 1);
+    base.scale.set(maxX, maxY, 2);
 }
 
 function UpdateFingers(){
@@ -347,7 +360,7 @@ function adjustCanvasSize() {
     const width = Math.max(container.clientWidth, 1);
     const height = Math.max(container.clientHeight, 1);
     const aspect = width / height;
-    const viewSize = 185;
+    const viewSize = getAssembly().body * 1.57;
 
     // Adjust the camera aspect ratio and frustum
     camera.left = -(viewSize * aspect) / 2;
@@ -386,7 +399,25 @@ function handleInputChange() {
     }
     exportButton.disabled = modelsPending > 0;
     adjustPlate(width + tolerance, height + tolerance, thickness);
-    document.getElementById('model-size').textContent = `${(width + tolerance).toFixed(1)} × ${(height + tolerance).toFixed(1)} × ${thickness.toFixed(1)} mm`;
+    document.getElementById('model-size').textContent = `${getAssembly().nominal} mm holder · ${(width + tolerance).toFixed(1)} × ${(height + tolerance).toFixed(1)} × ${thickness.toFixed(1)} mm PCB pocket`;
+}
+
+function handleAssemblyChange() {
+    const assembly = getAssembly();
+    const widthInput = document.getElementById('width');
+    const heightInput = document.getElementById('height');
+    widthInput.max = assembly.nominal;
+    heightInput.max = assembly.nominal;
+    if (parseFloat(widthInput.value) > assembly.nominal) widthInput.value = assembly.nominal;
+    if (parseFloat(heightInput.value) > assembly.nominal) heightInput.value = assembly.nominal;
+
+    document.getElementById('assembly-details').textContent = `${assembly.frame} × ${assembly.frame} mm outer frame · boards up to ${assembly.nominal} mm`;
+    const hardwareDownload = document.getElementById('hardware-download');
+    hardwareDownload.href = `./3D/${assembly.bundle}`;
+    hardwareDownload.firstChild.textContent = `${assembly.nominal} mm holder files `;
+    controls.reset();
+    adjustCanvasSize();
+    handleInputChange();
 }
 
 // Add change event listeners to the form inputs
@@ -394,6 +425,7 @@ document.getElementById('width').addEventListener('input', handleInputChange);
 document.getElementById('height').addEventListener('input', handleInputChange);
 document.getElementById('thickness').addEventListener('change', handleInputChange);
 document.getElementById('tolerance').addEventListener('change', handleInputChange);
+document.getElementById('assembly-size').addEventListener('change', handleAssemblyChange);
 
 // Call the function once to log the initial values on page load
 handleInputChange();

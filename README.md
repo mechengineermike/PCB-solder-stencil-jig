@@ -8,26 +8,12 @@ A browser-based generator for making a custom 3D-printable PCB tray. The tray wo
 
 ## Use it
 
-1. Enter the finished width, height, and thickness of the PCB.
-2. Select a clearance value that suits your printer.
-3. Download the generated tray STL.
-4. Download and print the static holder files once.
+1. Choose the 99 mm, 150 mm, or 201 mm holder assembly.
+2. Enter the finished width, height, and thickness of the PCB.
+3. Select a clearance value that suits your printer.
+4. Download the generated tray STL and matching static holder bundle.
 
-The model is generated entirely in the browser; no files or dimensions are uploaded. Boards from 5–100 mm in width and height are supported. A blank STEP template is included for non-rectangular designs.
-
-## Run locally
-
-The app has no build step. Because the viewer loads ES modules and local STL files, serve the directory over HTTP rather than opening `index.html` directly. For example:
-
-```sh
-python -m http.server 8000
-```
-
-Then open <http://localhost:8000>.
-
-## GitHub Pages
-
-In the repository settings, select **Pages → Deploy from a branch**, then choose the root of the default branch. The included `.nojekyll` file lets GitHub Pages serve the static app as-is.
+The model is generated entirely in the browser; no files or dimensions are uploaded. The three holder bundles support boards up to 99 mm, 150 mm, or 201 mm. Each bundle includes STL and STEP files plus a blank tray for non-rectangular designs.
 
 ## Credits
 
