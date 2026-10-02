@@ -38,3 +38,13 @@ In the repository settings, select **Pages → Deploy from a branch**, then choo
 ## License
 
 Released under the [MIT License](LICENSE).
+
+## What it makes
+
+The generator creates the PCB-sized center tray used with the printable hinge, frame, and feet from the original [Solder Stencil PCB Jig project on Thingiverse](https://www.thingiverse.com/thing:6313798).
+
+| Original printed jig | Browser tray generator |
+| --- | --- |
+| [![The assembled Solder Stencil PCB Jig holding a PCB and stencil](img/original-solder-stencil-jig.jpg)](https://www.thingiverse.com/thing:6313798) | [![The PCB Stencil Holder Generator interface](screenshot.png)](https://mechengineermike.github.io/SolderStencilPCBHolder/) |
+
+*Original project photo by Michael Graham, from [Thingiverse thing:6313798](https://www.thingiverse.com/thing:6313798).*

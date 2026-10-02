@@ -47,6 +47,14 @@ function init() {
     keyLight.position.set(-80, -100, 160);
     scene.add(keyLight);
 
+    // A loose build-plane grid gives the model scale and orientation in space.
+    const grid = new THREE.GridHelper(240, 12, 0x596052, 0x2b302b);
+    grid.rotation.x = Math.PI / 2;
+    grid.position.z = -2.1;
+    grid.material.transparent = true;
+    grid.material.opacity = 0.55;
+    scene.add(grid);
+
     createCubes();
 
     // Load the STL file into the scene
